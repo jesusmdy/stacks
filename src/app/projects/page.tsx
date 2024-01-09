@@ -1,7 +1,7 @@
 'use client'
-import { Box, useColorMode } from '@chakra-ui/react';
+import { Box, Card, CardBody, Text, useColorMode } from '@chakra-ui/react';
 import { FC, PropsWithChildren } from 'react';
-import ProjectsCard from '../../components/ProjectsCard';
+import ProjectsCard from '../../../components/ProjectsCard';
 
 const Wrapper: FC<PropsWithChildren<any>> = ({ children }) => {
   const scheme = useColorMode();
@@ -19,7 +19,7 @@ const Wrapper: FC<PropsWithChildren<any>> = ({ children }) => {
   );
 };
 
-const LandingPage: FC = () => {
+const ProjectsPage: FC = () => {
   return (
     <Wrapper>
       <ProjectsCard />
@@ -27,4 +27,4 @@ const LandingPage: FC = () => {
   );
 };
 
-export default LandingPage;
+export default ProjectsPage;
