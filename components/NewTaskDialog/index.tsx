@@ -7,6 +7,8 @@ import { useForm } from 'react-hook-form';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import { useAddTask } from '../../store/task';
 import { v4 as uuid } from 'uuid';
+import { PRIORITIES } from '../../utils/constants';
+import _ from 'lodash';
 
 const Navigation: FC<{
   status: StatusItem;
@@ -32,6 +34,7 @@ interface NewTaskFields {
   description: string;
   estimatedTime: number;
   dueDate: string;
+  priority: 1 | 2 | 3;
 }
 
 const NewTaskDialog: FC<{
@@ -59,7 +62,7 @@ const NewTaskDialog: FC<{
       tags: [],
       estimatedTime: data.estimatedTime,
       timeSpent: 0,
-      priority: 0,
+      priority: data.priority,
       subTask: [],
       comments: [],
     }
@@ -84,6 +87,19 @@ const NewTaskDialog: FC<{
               <Textarea placeholder="Task description" { ...methods.register('description') } />
               <Input type="number" placeholder="Estimated time (in hours)" { ...methods.register('estimatedTime') } />
               <Box>
+                <FormLabel htmlFor="priority">Priority</FormLabel>
+                <Select { ...methods.register('priority') } id="priority">
+                  {
+                    _.map(
+                      PRIORITIES,
+                      (priority, index) => (
+                        <option key={index} value={index}>{priority.label}</option>
+                      )
+                    )
+                  }
+                </Select>
+              </Box>
+              <Box>
                 <FormLabel htmlFor="dueDate">Due date</FormLabel>
                 <Input type="date" id="dueDate" placeholder="Due date" { ...methods.register('dueDate') } />
               </Box>
@@ -95,7 +111,7 @@ const NewTaskDialog: FC<{
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <Button width="100%" variant="outline" onClick={openDialog}>Add new task</Button>
+      <Button size="xs" colorScheme="purple" variant="ghost" onClick={openDialog}>Add new task</Button>
     </Fragment>
   )
 };

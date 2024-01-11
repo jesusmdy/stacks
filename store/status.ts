@@ -50,3 +50,4 @@ export const useRemoveStatus = () => useStatus((state) => state.removeStatus);
 export const useStatusList = () => useStatus((state) => state.status);
 export const useUpdateStatus = () => useStatus((state) => state.updateStatus);
 export const useGetStatusByProjectId = (projectId: string) => useStatus((state) => _.filter(_.flatten(state.status), { projectId }));
+export const useGetStatusByID = (id: string) => useStatus((state) => _.find(_.flatten(state.status), { id }));

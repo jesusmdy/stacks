@@ -1,6 +1,6 @@
 import { FC, useContext } from 'react';
 import { StatusItem } from '../../store/status';
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, Text, useColorMode } from '@chakra-ui/react';
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, Stack, Text, useColorMode } from '@chakra-ui/react';
 import { ProjectContext } from '@/app/projects/[projectId]/context';
 import { useGetTasksByStatusId } from '../../store/task';
 import NewTaskDialog from '../NewTaskDialog';
@@ -14,24 +14,31 @@ const StatusLayout: FC<{
   const colorMode = useColorMode().colorMode;
   return (
     <Box flex={1}>
-      <Card>
+      <Card
+        size="sm"
+        variant="outline"
+        borderRadius="xl"
+      >
         <CardHeader
           borderBottom="1px solid"
-          borderColor={colorMode === 'light' ? 'gray.200' : 'gray.600'}
+          borderColor="inherit"
+          paddingY={2}
         >
           <Text fontSize="sm" fontWeight="bold">{status.name}</Text>
         </CardHeader>
-        <CardBody>
-          {
-            _.map(
-              taskList,
-              task => (
-                <TaskItem key={task.id} task={task} />
+        <CardBody padding={0}>
+          <Stack direction="column" gap={0}>
+            {
+              _.map(
+                taskList,
+                task => (
+                  <TaskItem key={task.id} task={task} />
+                )
               )
-            )
-          }
+            }
+          </Stack>
         </CardBody>
-        <CardFooter>
+        <CardFooter paddingY={2}>
           <NewTaskDialog status={status} />
         </CardFooter>
       </Card>

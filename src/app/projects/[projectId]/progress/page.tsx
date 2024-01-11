@@ -1,9 +1,10 @@
 'use client'
-import { Box, Flex, Text } from '@chakra-ui/react';
+import { Box, Card, CardBody, CardHeader, Flex, Text, useColorMode } from '@chakra-ui/react';
 import { ProjectContext } from '../context';
 import { useContext } from 'react';
 import _ from 'lodash';
 import StatusLayout from '../../../../../components/Status';
+import { bgByColorMode } from '../../../../../theme';
 
 const EmptyPlaceholder = () => (
   <Box
@@ -20,22 +21,38 @@ const EmptyPlaceholder = () => (
 
 const ProjectProgressPage = () => {
   const { status } = useContext(ProjectContext);
+  const colorMode = useColorMode().colorMode;
   
   if (_.isEmpty(status)) return <EmptyPlaceholder />
 
   return (
-    <Flex
-      gap={4}
-      bg="gray.900"
+    <Box
+      bg={bgByColorMode(colorMode)}
       height="100%"
-      padding={4}
+      p={4}
     >
-      {
-        _.map(status, (status, index) => (
-          <StatusLayout key={index} status={status} />
-        ))
-      }
-    </Flex>
+      <Card
+        size="sm"
+        borderRadius="xl"
+      >
+        <CardHeader
+          borderBottom="1px solid"
+          borderColor="gray.100"
+          paddingY={2}
+        >
+          <Text fontSize="sm" fontWeight="bold">Tasks</Text>
+        </CardHeader>
+        <CardBody>
+          <Flex flexDir="column" gap={2}>
+            {
+              _.map(status, (status, index) => (
+                <StatusLayout key={index} status={status} />
+              ))
+            }
+          </Flex>
+        </CardBody>
+      </Card>
+    </Box>
   )
 };
 

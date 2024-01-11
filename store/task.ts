@@ -41,6 +41,7 @@ export const useTask = (id: string) => useTasks((state) => state.tasks.find((tas
 export const useAddTask = () => useTasks((state) => state.addTask);
 export const useRemoveTask = () => useTasks((state) => state.removeTask);
 export const useUpdateTask = () => useTasks((state) => state.updateTask);
+export const useGetTaskByID = (id: string) => useTasks((state) => state.tasks.find((task) => task.id === id));
 export const useGetTasksByProjectId = (projectId: string) => useTasks((state) => state.tasks.filter((task) => task.projectId === projectId));
 export const useGetTasksByStatusId = (statusId: string) => useTasks((state) => state.tasks.filter((task) => task.statusId === statusId));
 export const useGetTasksByTag = (tag: string) => useTasks((state) => state.tasks.filter((task) => task.tags.includes(tag)));
