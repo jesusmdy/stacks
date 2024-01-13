@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { TaskInterface, useUpdateTask } from '../../../store/task';
 import { useGetStatusByID, useGetStatusByProjectId, useStatusList } from '../../../store/status';
 import _ from 'lodash';
+import { db } from '../../../db';
 
 export const StatusFieldAction: FC<{
   task: TaskInterface,
@@ -14,10 +15,12 @@ export const StatusFieldAction: FC<{
   const updateTask = useUpdateTask();
 
   const handleChangeStatus = (statusId: string) => {
-    updateTask({
-      ...task,
+    db.tasks.update(task.id, {
       statusId
-    });
+    })
+      .then(() => {
+        updateTask({ ...task, statusId });
+      })
   }
 
   if (!status || !statusList) return null;

@@ -1,6 +1,6 @@
 'use client';
 
-import { Text, Card, CardBody, Flex, Box } from '@chakra-ui/react';
+import { Text, Card, CardBody, Flex, Box, Stack } from '@chakra-ui/react';
 import { FC } from 'react';
 import { ProjectProps, useProjects } from '../../store/projects';
 import _ from 'lodash';
@@ -16,13 +16,12 @@ const ProjectItem: FC<{ project: ProjectProps }> = ({ project }) => {
       display="flex"
       alignItems="center"
       p={2}
-      fontSize="sm"
-      fontFamily="monospace"
-      border="1px"
+      borderBottom="1px"
       borderColor="gray.200"
-      borderRadius="md"
+      _last={{ borderBottom: 'none' }}
+      _hover={{ color: 'purple.500' }}
     >
-      <Text flex={1}>{project.name}</Text>
+      <Text flex={1} fontSize="xs" fontWeight="semibold">{project.name}</Text>
       <ChevronRightIcon />
     </Box>
   );
@@ -34,7 +33,7 @@ const Projects: FC = () => {
   if (_.isEmpty(projects)) return (
     <Box
       border="1px"
-      borderColor="gray.200"
+      borderColor="gray.100"
       borderRadius="md"
       p={2}
       mt={4}
@@ -46,24 +45,20 @@ const Projects: FC = () => {
   )
 
   return (
-    <Flex
-      mt={4}
-      flexDir="column"
-      gap={2}
-      p={2}
-      border="1px"
-      borderColor="gray.200"
-      borderRadius="md"
-    >
-      {
-        _.map(
-          projects,
-          (project) => (
-            <ProjectItem key={project.id} project={project} />
-          )
-        )
-      }
-    </Flex>
+    <Card size="xs" mt={4}>
+      <CardBody p={0}>
+        <Flex direction="column">
+          {
+            _.map(
+              projects,
+              (project) => (
+                <ProjectItem key={project.id} project={project} />
+              )
+            )
+          }
+        </Flex>
+      </CardBody>
+    </Card>
   )
 };
 
@@ -71,12 +66,12 @@ const ProjectsCard: FC = () => {
   return (
     <Card
       width="md"
-      variant="outline"
+      rounded="xl"
     >
       <CardBody>
-        <Flex flexDir="column" gap={2}>
+        <Flex flexDir="column">
           <Text fontSize="xl" fontWeight="bold">Projects</Text>
-          <Text fontSize="sm" fontFamily="monospace">A simple project management tool.</Text>
+          <Text fontSize="xs" >A simple project management tool.</Text>
         </Flex>
         <Projects />
         <Flex mt={4}>

@@ -2,6 +2,7 @@
 import { Box, Card, CardBody, Text, useColorMode } from '@chakra-ui/react';
 import { FC, PropsWithChildren } from 'react';
 import ProjectsCard from '../../../components/ProjectsCard';
+import { bgByColorMode } from '../../../theme';
 
 const Wrapper: FC<PropsWithChildren<any>> = ({ children }) => {
   const scheme = useColorMode();
@@ -12,7 +13,7 @@ const Wrapper: FC<PropsWithChildren<any>> = ({ children }) => {
       display="flex"
       alignItems="center"
       justifyContent="center"
-      bg={scheme.colorMode === 'dark' ? 'gray.900' : 'gray.100'}
+      bg={bgByColorMode(scheme.colorMode)}
     >
       {children}
     </Box>

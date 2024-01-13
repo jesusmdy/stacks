@@ -19,8 +19,8 @@ type SeverityType = (keyof typeof SEVERITY);
 type PriorityType = (keyof typeof PRIORITY);
 
 export interface StatusItem {
-  projectId: string;
   id: string;
+  projectId: string;
   name: string;
   description: string;
   createdAt: Date;

@@ -22,22 +22,18 @@ const TaskModal: FC<{
       isOpen={isOpen}
       onClose={onClose}
       size="xl"
+      isCentered
     >
       <ModalOverlay />
       <ModalContent borderRadius="xl">
-        <ModalHeader
-          borderBottom="1px solid"
-          borderColor="inherit"
-          px={4}
-          py={3}
-        >
+        <ModalHeader borderBottom="1px solid" borderColor="inherit" px={4} py={3}>
           <Stack direction="row" align="center">
             <IconButton aria-label="next-task-button" size="xs" colorScheme="purple" variant="outline">
               <ChevronDownIcon />
             </IconButton>
             <IconButton aria-label="next-task-button" size="xs" colorScheme="purple" variant="outline">
               <ChevronUpIcon />
-            </IconButton>
+            </IconButton>            
           </Stack>
         </ModalHeader>
         <ModalCloseButton />

@@ -1,11 +1,10 @@
 'use client';
 import { ProjectContext } from '@/app/projects/[projectId]/context';
-import { Text, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Flex, Input, useColorMode, Tabs, Tab, TabList, Card, CardBody, Icon } from '@chakra-ui/react';
-import { HomeIcon } from '@heroicons/react/16/solid';
-import { AdjustmentsHorizontalIcon, CheckIcon, RectangleStackIcon } from '@heroicons/react/20/solid';
+import { Link } from '@chakra-ui/next-js';
+import { Text, Tabs, Tab, TabList, Card, CardBody, Icon } from '@chakra-ui/react';
+import { AdjustmentsHorizontalIcon, RectangleStackIcon } from '@heroicons/react/20/solid';
 import { ChartPieIcon } from '@heroicons/react/20/solid';
 import _ from 'lodash';
-import Link from 'next/link';
 import { FC, Fragment, PropsWithChildren, useContext } from 'react';
 
 const Wrapper: FC<PropsWithChildren<any>> = ({ children }) => {
@@ -23,7 +22,7 @@ export const Navigation: FC = () => {
   return (
     <Tabs variant="soft-rounded" size="sm" colorScheme="purple">
       <TabList>
-        <Tab as={Link} href={`/projects/${project.id}`}>
+        <Tab as={Link} href={`/projects/${project.id}/`}>
           <Icon as={ChartPieIcon} mr={2} />
           <Text>Overview</Text>
         </Tab>

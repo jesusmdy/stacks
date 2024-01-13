@@ -6,7 +6,17 @@ export const bgByColorMode = (colorMode: string) => ({
 }[colorMode]);
 
 const CardStyle: ComponentStyleConfig = {
-  baseStyle: {}
+  defaultProps: {
+    size: 'sm',
+    rounded: 'xl',
+  }
+};
+
+const ButtonStyle: ComponentStyleConfig = {
+  defaultProps: {
+    size: 'xs',
+    variant: 'outline',
+  }
 };
 
 const config: ThemeConfig = {
@@ -18,6 +28,7 @@ const theme = extendTheme({
   config,
   components:  {
     Card: CardStyle,
+    Button: ButtonStyle,
   },
 })
 

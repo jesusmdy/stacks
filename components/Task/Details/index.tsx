@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
 import { Box, Stack, Text } from '@chakra-ui/react';
@@ -6,6 +7,10 @@ import { TaskInterface } from '../../../store/task';
 import _ from 'lodash';
 import { useGetStatusByID } from '../../../store/status';
 import { StatusFieldAction } from '../../TaskItem/StatusLabel';
+import { PriorityLabelAction } from '../../TaskItem/PriorityLabel';
+import TaskDescriptionFields from './Description';
+import TaskNotes from './Notes';
+import ProgressCard from './Progress';
 
 const TaskDetails: FC<{
   task: TaskInterface;
@@ -24,8 +29,12 @@ const TaskDetails: FC<{
           value: <StatusFieldAction task={task} noButton />
         },
         {
+          title: 'Priority',
+          value: <PriorityLabelAction task={task} noButton />
+        },
+        {
           title: 'Due date',
-          value: dateFormatter(task.dueDate)
+          value: task.dueDate ? dateFormatter(task.dueDate) : 'No due date'
         },
         {
           title: 'Date created',
@@ -37,17 +46,8 @@ const TaskDetails: FC<{
   )
   return (
     <Box>
-      <Stack gap={2}>
-        <Text fontSize="lg" fontWeight="bold">{task.title}</Text>
-        <Text fontSize="sm">
-          {
-            task.description
-              ? task.description
-              : 'No description'
-          }
-        </Text>
-      </Stack>
-      <Stack direction="column" mt={4} gap={2}>
+      <TaskDescriptionFields task={task} />
+      <Stack direction="column" my={4} gap={2}>
         {
           _.map(
             details,
@@ -60,6 +60,8 @@ const TaskDetails: FC<{
           )
         }
       </Stack>
+      <ProgressCard task={task} />
+      <TaskNotes task={task} />
     </Box>
   )
 };
