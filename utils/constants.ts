@@ -78,3 +78,50 @@ export const valueParser = (value: string) => {
       return 0;
   }
 };
+
+export const statusColor = {
+  0: 'gray',
+  1: 'green',
+  2: 'yellow',
+  3: 'red',
+  4: 'orange',
+  5: 'teal',
+  6: 'blue',
+  7: 'cyan',
+  8: 'purple',
+  9: 'pink',
+};
+
+export const statusCategory = {
+  active: 'active',
+  completed: 'completed',
+  closed: 'closed',
+};
+
+export type StatusCategoryType = {
+  label: string;
+  value: string;
+  description: string;
+};
+
+export const statusCategoryList: StatusCategoryType[] = [
+  {
+    label: 'Active',
+    value: statusCategory.active,
+    description: 'Tasks that are active',
+  },
+  {
+    label: 'Completed',
+    value: statusCategory.completed,
+    description: 'Tasks that are completed',
+  },
+  {
+    label: 'Closed',
+    value: statusCategory.closed,
+    description: 'Tasks that are closed and removed for view',
+  },
+];
+
+export const toDateString = (date: Date) => {
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+};

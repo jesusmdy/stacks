@@ -1,8 +1,9 @@
 'use client';
 import { FC, useState } from 'react';
 import { TaskInterface, useUpdateTask } from '../../../../store/task';
-import { Box, Button, Input, Stack, Text, Textarea } from '@chakra-ui/react';
+import { Box, Button, Flex, Input, Stack, Text, Textarea } from '@chakra-ui/react';
 import { db } from '../../../../db';
+import TaskActionsMenu from '../Actions';
 
 export const DescriptionField: FC<{
   task: TaskInterface
@@ -94,21 +95,18 @@ export const TitleField: FC<{
   }
 
   if (!editMode) return (
-    <Box
-      onClick={() => setEditMode(true)}
-      cursor="pointer"
-      _hover={{
-        color: 'purple.500'
-      }}
-    >
-      <Text fontSize="lg" fontWeight="bold">
-        {
-          task.title
-            ? task.title
-            : 'Add title'
-        }
-      </Text>
-    </Box>
+    <Flex alignItems="center">
+      <Box onClick={() => setEditMode(true)} cursor="pointer" _hover={{ color: 'purple.500' }} flex={1}>
+        <Text fontSize="lg" fontWeight="bold">
+          {
+            task.title
+              ? task.title
+              : 'Add title'
+          }
+        </Text>
+      </Box>
+      <TaskActionsMenu task={task} />
+    </Flex>
   )
 
   return (

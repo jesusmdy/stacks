@@ -26,7 +26,7 @@ const TaskWrapper: FC<{ taskId: string }> = ({ taskId }) => {
       >
         <Button
           as={Link}
-          href={`/projects/${task.projectId}/progress`}
+          href={`/projects/${task.projectId}/list`}
           variant="outline"
           size="xs"
         >

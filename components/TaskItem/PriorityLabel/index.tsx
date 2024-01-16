@@ -1,7 +1,7 @@
 import { FC, useMemo } from 'react';
 import { TaskInterface, useUpdateTask } from '../../../store/task';
 import { PRIORITIES, getPriorityProperties } from '../../../utils/constants';
-import { Button, Flex, Menu, MenuButton, MenuItem, MenuList, Tag } from '@chakra-ui/react';
+import { Button, Flex, FlexProps, Menu, MenuButton, MenuItem, MenuList, Tag } from '@chakra-ui/react';
 import _ from 'lodash';
 import { db } from '../../../db';
 
@@ -27,7 +27,7 @@ export const PriorityLabelAction: FC<{
 
   return (
     <Menu>
-      <MenuButton as={Button} variant={ noButton ? 'unstyled' : 'ghost' } size="sm" rounded="full">
+      <MenuButton as={Button} variant="unstyled" size="sm" rounded="full">
         <Tag size="sm" colorScheme={tag.color} borderRadius="full">{tag.label}</Tag>
       </MenuButton>
       <MenuList>
@@ -53,11 +53,12 @@ export const PriorityLabelAction: FC<{
 };
 
 const PriorityLabel: FC<{
-  task: TaskInterface
-}> = ({ task }) => {
+  task: TaskInterface,
+  flexProps?: FlexProps
+}> = ({ task, flexProps }) => {
 
   return (
-    <Flex alignItems="center" width="10%" borderLeft="1px solid" borderColor="inherit" paddingX={2}>
+    <Flex alignItems="center" width="10%" borderLeft="1px solid" borderColor="inherit" paddingX={2} {...flexProps}>
       <PriorityLabelAction task={task} />
     </Flex>
   )

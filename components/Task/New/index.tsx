@@ -1,19 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client';
-import { Box, Button, FormLabel, Icon, Input, Menu, MenuButton, MenuItem, MenuList, Popover, PopoverContent, PopoverTrigger, Select, Stack, Text, Textarea } from '@chakra-ui/react';
+import { Box, Button, Flex, FormLabel, Icon, Input, Menu, MenuButton, MenuItem, MenuList, Popover, PopoverContent, PopoverTrigger, Select, Stack, Text, Textarea, useToast } from '@chakra-ui/react';
 import { FC, Fragment, useContext, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import { v4 as uuid } from 'uuid';
 import _ from 'lodash';
-import { useAddTask } from '../../../store/task';
+import { TaskInterface, useAddTask } from '../../../store/task';
 import { PRIORITIES, getPriorityProperties } from '../../../utils/constants';
 import { StatusItem } from '../../../store/status';
 import { CalendarIcon } from '@chakra-ui/icons';
 import { DayPicker } from 'react-day-picker';
 import { daysToWeeks } from 'date-fns';
-import { FlagIcon } from '@heroicons/react/20/solid';
+import { ArrowUpLeftIcon, FlagIcon } from '@heroicons/react/20/solid';
 import { ProjectContext } from '@/app/projects/[projectId]/context';
 import { db } from '../../../db';
+import Link from 'next/link';
+import StatusPicker from '../../Status/Picker';
 
 interface NewTaskFields {
   name: string;
@@ -65,6 +67,7 @@ const DueDateField: FC = () => {
             mode="single"
             selected={selected}
             onSelect={setSelected}
+            style={{ borderRadius: 'var(--chakra-radii-md)' }}
           />
         </PopoverContent>
       </Popover>
@@ -125,7 +128,8 @@ const PriorityField: FC = () => {
 
 const StatusField: FC<{
   status: StatusItem;
-}> = ({ status }) => {
+  disabled?: boolean;
+}> = ({ status, disabled }) => {
   const { register, setValue, watch } = useFormContext();
   const { status: statusList } = useContext(ProjectContext);
   const statusId = watch('status');
@@ -138,41 +142,49 @@ const StatusField: FC<{
     setValue('status', status.id);
   }, [status]);
 
+
+  if (disabled) return (
+    <Button variant="outline" size="xs" disabled>
+      <Text fontSize="xs">{currentStatus?.name || 'Status'}</Text>
+    </Button>
+  )
+
   return (
     <Fragment>
       <input type="hidden" { ...register('status') } />
-      <Menu>
-        <MenuButton as={Button} variant="outline" size="xs">
-          <Text fontSize="xs">{currentStatus?.name}</Text>
-        </MenuButton>
-        <MenuList>
-          {
-            _.map(
-              statusList,
-              (status, index) => {
-                return (
-                  <MenuItem
-                    key={index}
-                    value={status.id}
-                    onClick={() => setValue('status', status.id)}
-                  >
-                    <Text fontSize="xs">{status.name}</Text>
-                  </MenuItem>
-                )
-              }
-            )
-          }
-        </MenuList>
-      </Menu>
+      <StatusPicker
+        defaultValue={statusId}
+        onChange={(statusId) => setValue('status', statusId)}
+        withLabel
+        buttonProps={{
+          variant: 'outline',
+        }}
+      />
     </Fragment>
+  )
+};
+
+const ParentTaskIndicator: FC<{
+  parentTask?: TaskInterface;
+}> = ({ parentTask }) => {
+  if (!parentTask) return null;
+  return (
+    <Box>
+      <Button>
+        <Icon as={ArrowUpLeftIcon} mr={2} />
+        <Text>{parentTask.title}</Text>
+      </Button>
+    </Box>
   )
 };
 
 const NewTask: FC<{
   status: StatusItem,
+  parentTask?: TaskInterface;
   onSuccess?: (taskId: string) => void;
   onClose?: () => void;
-}> = ({ status, onSuccess, onClose }) => {
+}> = ({ status, onSuccess, onClose, parentTask }) => {
+  const toast = useToast();
 
   const methods = useForm<NewTaskFields>({
     defaultValues: {
@@ -187,7 +199,15 @@ const NewTask: FC<{
   };
 
   const onSubmit = (data: any) => {
-    const task = {
+    if (!data.status) {
+      toast({
+        title: 'Status is required',
+        status: 'error',
+        duration: 3000,
+      });
+      return;
+    }
+    const task: TaskInterface = {
       id: uuid(),
       projectId: status.projectId,
       statusId: data.status,
@@ -201,11 +221,19 @@ const NewTask: FC<{
       priority: data.priority,
       subTask: [],
       comments: [],
+      parentId: parentTask?.id,
     }
     db.tasks.put(task)
       .then(() => {
         addTask(task);
         closeDialog();
+        if (parentTask) {
+          const subtasks = parentTask.subTask || [];
+          subtasks.push(task.id);
+          db.tasks.update(parentTask.id, {
+            subTask: subtasks,
+          });
+        }
         onSuccess && onSuccess(task.id);
       });
   };
@@ -217,19 +245,27 @@ const NewTask: FC<{
       >
         <Box>
           <Box display="flex" flexDirection="column" gap={4} mt={4}>
+            <ParentTaskIndicator parentTask={parentTask} />
             <Input placeholder="Task name" { ...methods.register('name', { required: true }) } size="sm" rounded="lg" />
             <Textarea placeholder="Task description" { ...methods.register('description') } size="sm" rounded="lg" />
             <Input type="number" placeholder="Estimated time (in hours)" { ...methods.register('estimatedTime') } size="sm" rounded="lg" />
             <Stack direction="row" my={4}>
-              <StatusField status={status} />
+              <StatusField
+                status={status}
+                disabled={!!parentTask}
+              />
               <DueDateField />
               <PriorityField />
             </Stack>
           </Box>
         </Box>
         <Stack direction="row" justifyContent="end" my={4}>
-          <Button mr={3} variant="outline" onClick={closeDialog} size="sm" rounded="lg">Cancel</Button>
-          <Button colorScheme="purple" type="submit" size="sm" rounded="lg">Create task</Button>
+          <Button mr={3} variant="outline" onClick={closeDialog} size="xs" rounded="lg">Cancel</Button>
+          <Button colorScheme="purple" variant="solid" type="submit" size="xs" rounded="lg">
+            {
+              parentTask ? 'Add subtask' : 'Create task'
+            }
+          </Button>
         </Stack>
       </Box>
     </FormProvider>

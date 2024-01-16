@@ -5,7 +5,6 @@ import ProjectHeader from '../../../../components/ProjectPage/Header';
 import { Box } from '@chakra-ui/react';
 import ProjectPageToolbar from '../../../../components/ProjectPage/Toolbar';
 import StyledWrapper from '../../../../components/Layout/StyledWrapper';
-import { Button } from 'react-day-picker';
 
 const ProjectLayout: FC<PropsWithChildren<{
   children: React.ReactNode;

@@ -80,12 +80,13 @@ const TrackTimeDialog: FC<{
                 variant="filled"
                 rounded="md"
                 onKeyDown={handleEnter}
+                colorScheme="purple"
               />
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onClose} size="sm">Cancel</Button>
-              <Button colorScheme="purple" onClick={onClick} ml={3} size="sm">Track</Button>
+              <Button ref={cancelRef} onClick={onClose} size="xs">Cancel</Button>
+              <Button colorScheme="purple" variant="solid" onClick={onClick} ml={3} size="xs">Track</Button>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialogOverlay>

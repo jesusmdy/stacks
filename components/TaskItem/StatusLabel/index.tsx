@@ -1,9 +1,10 @@
-import { Button, Flex, Menu, MenuButton, MenuItem, MenuList, Tag } from '@chakra-ui/react';
+import { Button, Flex, FlexProps, Menu, MenuButton, MenuItem, MenuList, Tag } from '@chakra-ui/react';
 import { FC } from 'react';
 import { TaskInterface, useUpdateTask } from '../../../store/task';
 import { useGetStatusByID, useGetStatusByProjectId, useStatusList } from '../../../store/status';
 import _ from 'lodash';
 import { db } from '../../../db';
+import StatusActionButton from '../StatusAction';
 
 export const StatusFieldAction: FC<{
   task: TaskInterface,
@@ -27,8 +28,8 @@ export const StatusFieldAction: FC<{
 
   return (
     <Menu>
-      <MenuButton as={Button} variant={noButton ? 'unstyled' : 'ghost'} size="xs" rounded="full">
-        <Tag size="sm" rounded="full">{status.name}</Tag>
+      <MenuButton as={Button} variant="unstyled" size="xs" rounded="full">
+        <Tag size="sm" rounded="full" colorScheme={status.color}>{status.name}</Tag>
       </MenuButton>
       <MenuList>
         {
@@ -38,10 +39,9 @@ export const StatusFieldAction: FC<{
               return (
                 <MenuItem
                   key={status.id}
-                  fontSize="sm"
                   onClick={() => handleChangeStatus(status.id)}
                 >
-                  <Tag>{status.name}</Tag>
+                  <Tag colorScheme={status.color} rounded="full" fontSize="xs">{status.name}</Tag>
                 </MenuItem>
               )
             }
@@ -53,11 +53,12 @@ export const StatusFieldAction: FC<{
 };
 
 const StatusField: FC<{
-  task: TaskInterface
-}> = ({ task }) => {
+  task: TaskInterface,
+  flexProps?: FlexProps
+}> = ({ task, flexProps }) => {
   return (
-    <Flex alignItems="center" width="10%" borderLeft="1px solid" borderColor="inherit" paddingX={2}>
-      <StatusFieldAction task={task} />
+    <Flex alignItems="center" width="10%" borderLeft="1px solid" borderColor="inherit" paddingX={2} { ...flexProps }>
+      <StatusActionButton task={task} withLabel />
     </Flex>
   )
 };

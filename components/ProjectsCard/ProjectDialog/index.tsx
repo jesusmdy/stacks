@@ -6,6 +6,7 @@ import _ from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import { PRIORITY, SEVERITY, StatusItem, useAddStatus } from '../../../store/status';
 import { db } from '../../../db';
+import { statusCategory, statusColor } from '../../../utils/constants';
 
 interface ProjectForm {
   name: string;
@@ -15,11 +16,14 @@ interface ProjectForm {
 const placeholderStatuses = [
   {
     id: uuidv4(),
-    name: 'To do',
-    description: 'Tasks that are not started yet',
+    name: 'Open',
+    description: 'Tasks that are open',
     createdAt: new Date(),
     severity: SEVERITY.warning,
     priority: PRIORITY.high,
+    color: statusColor[0],
+    category: statusCategory.active,
+    inmutable: true,
   },
   {
     id: uuidv4(),
@@ -28,6 +32,8 @@ const placeholderStatuses = [
     createdAt: new Date(),
     severity: SEVERITY.info,
     priority: PRIORITY.medium,
+    color: statusColor[6],
+    category: statusCategory.active
   },
   {
     id: uuidv4(),
@@ -36,6 +42,19 @@ const placeholderStatuses = [
     createdAt: new Date(),
     severity: SEVERITY.success,
     priority: PRIORITY.low,
+    color: statusColor[1],
+    category: statusCategory.completed
+  },
+  {
+    id: uuidv4(),
+    name: 'Closed',
+    description: 'Tasks that are closed',
+    createdAt: new Date(),
+    severity: SEVERITY.info,
+    priority: PRIORITY.low,
+    color: statusColor[7],
+    category: statusCategory.closed,
+    inmutable: true,
   }
 ];
 
@@ -85,7 +104,7 @@ const ProjectDialog: FC = () => {
 
   return (
     <Fragment>
-      <Button colorScheme="purple" size="xs" onClick={handleOpen}>New project</Button>
+      <Button colorScheme="purple"  onClick={handleOpen}>New project</Button>
       <Modal isOpen={isOpen} onClose={handleClose} isCentered>
         <ModalOverlay />
         <ModalContent

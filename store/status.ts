@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { create } from 'zustand';
+import { statusCategory, statusColor } from '../utils/constants';
 
 
 export const SEVERITY: Record<string, string> = {
@@ -18,6 +19,8 @@ export const PRIORITY: Record<string, string> = {
 type SeverityType = (keyof typeof SEVERITY);
 type PriorityType = (keyof typeof PRIORITY);
 
+export type StatusCategoryType = (keyof typeof statusCategory);
+
 export interface StatusItem {
   id: string;
   projectId: string;
@@ -26,6 +29,9 @@ export interface StatusItem {
   createdAt: Date;
   severity: SeverityType;
   priority: PriorityType;
+  color: string;
+  category: StatusCategoryType;
+  inmutable: boolean;
 }
 
 interface StatusStore {
@@ -51,3 +57,4 @@ export const useStatusList = () => useStatus((state) => state.status);
 export const useUpdateStatus = () => useStatus((state) => state.updateStatus);
 export const useGetStatusByProjectId = (projectId: string) => useStatus((state) => _.filter(_.flatten(state.status), { projectId }));
 export const useGetStatusByID = (id: string) => useStatus((state) => _.find(_.flatten(state.status), { id }));
+export const useGetStatusByCategory = (category: StatusCategoryType) => useStatus((state) => _.filter(_.flatten(state.status), { category }));

@@ -1,8 +1,8 @@
 import { FC, Fragment } from 'react';
-import { NoteInterface, useDeleteNote } from '../../../../../store/notes';
 import { Box, Text, Card, CardBody, CardFooter, Stack, Flex, IconButton } from '@chakra-ui/react';
 import { TrashIcon } from '@heroicons/react/20/solid';
-import { db } from '../../../../../db';
+import { NoteInterface, useDeleteNote } from '../../../store/notes';
+import { db } from '../../../db';
 
 const Note: FC<{
   note: NoteInterface;
@@ -18,7 +18,7 @@ const Note: FC<{
 
   return (
     <Box>
-      <Card size="sm" variant="filled" borderRadius="lg">
+      <Card size="sm" variant="inherit" borderRadius="lg">
         <CardBody padding={2}>
           <Flex alignItems="center">
             <Box flex={1}>

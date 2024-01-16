@@ -7,7 +7,7 @@ export const db: Record<string, any> = new Dexie(NAME);
 
 db.version(VERSION).stores({
   projects: 'id, name, description, createdAt',
-  status: 'id, name, projectId, description, createdAt, severity, priority',
-  tasks: 'id, projectId, statusId, title, description, dateCreated, dueDate, tags, estimatedTime, timeSpent, priority, subTask, comments',
+  status: 'id, name, projectId, description, createdAt, severity, priority, color, category',
+  tasks: 'id, projectId, statusId, title, description, dateCreated, dueDate, tags, estimatedTime, timeSpent, priority, subTask, comments, isSubTask',
   notes: 'id, projectId, parentId, content, createdAt',
 });

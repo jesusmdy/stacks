@@ -3,10 +3,11 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons'
 import { Button, IconButton, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Text, useDisclosure } from '@chakra-ui/react'
 import { useRouter } from 'next/navigation'
-import { FC, Fragment } from 'react'
+import { FC, Fragment, useContext } from 'react'
 import { createPortal } from 'react-dom'
 import { useGetTaskByID } from '../../../../../../../store/task'
 import TaskDetails from '../../../../../../../components/Task/Details'
+import { ProjectContext } from '../../../context'
 
 const TaskModal: FC<{
   taskId: string;
@@ -14,9 +15,11 @@ const TaskModal: FC<{
   const task = useGetTaskByID(taskId);
   const router = useRouter()
   const isOpen = true
+
   const onClose = () => {
     router.back()
   }
+
   return createPortal(
     <Modal
       isOpen={isOpen}
@@ -40,7 +43,7 @@ const TaskModal: FC<{
         <ModalBody p={4}>
           {
             task
-              ? <TaskDetails task={task} />
+              ? <TaskDetails task={task} asColumn />
               : (
                 <Fragment>
                   <Text>Task not found</Text>

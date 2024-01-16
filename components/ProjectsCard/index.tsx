@@ -1,28 +1,31 @@
 'use client';
 
-import { Text, Card, CardBody, Flex, Box, Stack } from '@chakra-ui/react';
+import { Text, Card, CardBody, Flex, Box, Stack, Icon, Button } from '@chakra-ui/react';
 import { FC } from 'react';
 import { ProjectProps, useProjects } from '../../store/projects';
 import _ from 'lodash';
 import ProjectDialog from './ProjectDialog';
-import { ChevronRightIcon } from '@chakra-ui/icons';
+import { ArrowForwardIcon, ArrowRightIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
+import { DocumentIcon, FolderIcon } from '@heroicons/react/20/solid';
 
 const ProjectItem: FC<{ project: ProjectProps }> = ({ project }) => {
+  const projectLink = `/projects/${project.id}`;
   return (
     <Box
-      as={Link}
-      href={`/projects/${project.id}`}
       display="flex"
       alignItems="center"
+      boxShadow="xs"
+      rounded="lg"
       p={2}
-      borderBottom="1px"
-      borderColor="gray.200"
-      _last={{ borderBottom: 'none' }}
-      _hover={{ color: 'purple.500' }}
+      border="1px solid"
+      borderColor="inherit"
     >
-      <Text flex={1} fontSize="xs" fontWeight="semibold">{project.name}</Text>
-      <ChevronRightIcon />
+      <Icon as={DocumentIcon} boxSize={4} mr={2} />
+      <Text flex={1} fontSize="xs" fontWeight="semibold" as={Link} href={projectLink}>{project.name}</Text>
+      <Button as={Link} href={projectLink} variant="solid" rightIcon={<ArrowForwardIcon />} bg="black" color="white" _hover={{ bg: 'gray.900' }}>
+        Access
+      </Button>
     </Box>
   );
 };
@@ -45,33 +48,59 @@ const Projects: FC = () => {
   )
 
   return (
-    <Card size="xs" mt={4}>
-      <CardBody p={0}>
-        <Flex direction="column">
-          {
-            _.map(
-              projects,
-              (project) => (
-                <ProjectItem key={project.id} project={project} />
-              )
-            )
-          }
-        </Flex>
-      </CardBody>
-    </Card>
+    <Flex direction="column" mt={4}>
+      {
+        _.map(
+          projects,
+          (project) => (
+            <ProjectItem key={project.id} project={project} />
+          )
+        )
+      }
+    </Flex>
   )
 };
+
+const HeaderIcon: FC = () => {
+  return (
+    <Box
+      position="relative"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      mr={2}
+    >
+      <Icon
+        as={FolderIcon}
+        backdropBlur={50}
+        zIndex={1}
+        boxSize={10}
+        border="1px solid"
+        borderColor="gray.200"
+        rounded="lg"
+        p={1}
+      />
+    </Box>
+  )
+}
 
 const ProjectsCard: FC = () => {
   return (
     <Card
-      width="md"
+      width="3xl"
       rounded="xl"
+      mx="auto"
+      variant="outline"
     >
       <CardBody>
-        <Flex flexDir="column">
-          <Text fontSize="xl" fontWeight="bold">Projects</Text>
-          <Text fontSize="xs" >A simple project management tool.</Text>
+        <Flex>
+          <HeaderIcon />
+          <Box flex={1}>
+            <Text fontSize="lg" fontWeight="bold">Your projects</Text>
+            <Text fontSize="xs" color="">
+              Select a project to view its tasks or create a new one.
+            </Text>
+          </Box>
         </Flex>
         <Projects />
         <Flex mt={4}>
