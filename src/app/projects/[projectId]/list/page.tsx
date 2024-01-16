@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import TasksCard from '../../../../../components/Tasks/Card';
 
-export const TaskList: FC = () => {
+const TaskListPage: FC = () => {
   return <TasksCard m={4} />;
 };
 
-export default TaskList;
+export default TaskListPage;
